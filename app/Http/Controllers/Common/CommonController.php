@@ -27,7 +27,7 @@ class CommonController extends Controller
     {
         $parameters = $request->all();
         $validator = Validator::make($parameters, [
-            'photo' => ['file', 'image', 'max:10240'],
+            'picture' => ['file', 'image', 'max:10240'],
         ]);
         if ($validator->fails()) {
             return $this->fail($validator->errors()->first());
@@ -36,7 +36,7 @@ class CommonController extends Controller
 
         $fileName = 'buaa' . str_random(5) . date('YmdHis') . '.jpg';
 
-        $res = $disk->put($fileName, file_get_contents($parameters['photo']));
+        $res = $disk->put($fileName, file_get_contents($parameters['picture']));
         if ($res) {
             return $this->success([
                 'url' => $this->getUrl($fileName),
