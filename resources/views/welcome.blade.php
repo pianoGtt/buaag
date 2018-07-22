@@ -79,7 +79,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Beihang University Game
+                    Beihang University Group
                 </div>
 
                 <div class="links">

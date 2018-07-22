@@ -17,7 +17,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-Route::namespace('Api')->group(function () {
-    Route::any('index', 'IndexController@index');
+Route::prefix('common')->namespace('Common')->group(function () {
+    Route::post('upload', 'CommonController@upload');
 });
+
+Route::prefix('user')->namespace('Api')->group(function () {
+    Route::any('index', 'UserController@index');
+    Route::any('login', 'UserController@login');
+});
+
