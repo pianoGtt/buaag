@@ -3,7 +3,7 @@
  * common controller class
  *
  * @package Controller
- * @author: shubiao-yao <yaoshubiao@xin.com>
+ * @author: shubiao-yao <yaoshubiao@gmail.com>
  * @DateTime: 2018/7/22 11:35
  */
 

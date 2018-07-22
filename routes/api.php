@@ -26,3 +26,14 @@ Route::prefix('user')->namespace('Api')->group(function () {
     Route::any('login', 'UserController@login');
 });
 
+Route::prefix('topic')->namespace('Api')->group(function () {
+    Route::any('store', 'TopicController@store');
+    Route::any('index', 'TopicController@index');
+    Route::any('show', 'TopicController@show');
+});
+
+Route::prefix('comment')->namespace('Api')->group(function () {
+    Route::any('index', 'CommentController@index');
+    Route::any('store', 'CommentController@store');
+});
+

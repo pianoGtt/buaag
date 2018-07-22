@@ -56,7 +56,7 @@ trait BaseRepository
      */
     public function getById($id)
     {
-        return $this->model->findOrFail($id);
+        return $this->model->find($id);
     }
 
     /**
@@ -100,14 +100,15 @@ trait BaseRepository
     /**
      * Get number of the records
      *
+     * @param  array $where
      * @param  int $number
      * @param  string $sort
      * @param  string $sortColumn
      * @return Paginate
      */
-    public function page($number = 10, $sort = 'desc', $sortColumn = 'created_at')
+    public function list(array $where, $number = 10, $sort = 'desc', $sortColumn = 'created_at')
     {
-        return $this->model->orderBy($sortColumn, $sort)->paginate($number);
+        return $this->model->where($where)->orderBy($sortColumn, $sort)->paginate($number);
     }
 
     /**
@@ -146,5 +147,18 @@ trait BaseRepository
         $model->fill($input);
         $model->save();
         return $model;
+    }
+
+    /**
+     * field increment number
+     *
+     * @param $where
+     * @param $field
+     * @param $number
+     * @return mixed
+     */
+    public function increment($where,$field, $number = 1)
+    {
+        return $this->model->where($where)->increment($field, $number);;
     }
 }

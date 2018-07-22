@@ -88,11 +88,12 @@ class UserController extends Controller
             return $this->fail($validator->errors()->first());
         }
 
+        $random = str_random(4);
         $result = $this->model->firstOrCreate([
             'phone' => $parameters['phone']
         ], [
-            'name' => '',
-            'email' => date('his') . str_random(4) . '@gmail.com',
+            'name' => '用户' . $random,
+            'email' => date('his') . $random . '@gmail.com',
             'password' => sha1(date('his') . str_random(16)),
         ]);
 
