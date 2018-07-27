@@ -27,7 +27,7 @@ class CommonController extends Controller
     {
         $parameters = $request->all();
         $validator = Validator::make($parameters, [
-            'picture' => ['file', 'image', 'max:10240'],
+            'picture' => ['required','file', 'image', 'max:10240'],
         ]);
         if ($validator->fails()) {
             return $this->fail($validator->errors()->first());
