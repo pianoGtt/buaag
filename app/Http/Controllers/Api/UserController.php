@@ -98,7 +98,9 @@ class UserController extends Controller
         ]);
 
         if ($result) {
-            return $this->success();
+            return $this->success([
+                'user_id' => $result->id
+            ]);
         }
         return $this->fail();
     }

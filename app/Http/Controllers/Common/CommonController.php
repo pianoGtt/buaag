@@ -27,7 +27,7 @@ class CommonController extends Controller
     {
         $parameters = $request->all();
         $validator = Validator::make($parameters, [
-            'picture' => ['required','file', 'image', 'max:10240'],
+            'picture' => ['required', 'file', 'image', 'max:10240'],
         ]);
         if ($validator->fails()) {
             return $this->fail($validator->errors()->first());
@@ -38,8 +38,9 @@ class CommonController extends Controller
 
         $res = $disk->put($fileName, file_get_contents($parameters['picture']));
         if ($res) {
+            $url = $this->getUrl($fileName);
             return $this->success([
-                'url' => $this->getUrl($fileName),
+                'img_name' => substr($url, 33),
             ]);
         }
         return $this->fail();
