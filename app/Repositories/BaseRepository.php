@@ -60,15 +60,14 @@ trait BaseRepository
     }
 
     /**
-     * Get model by field.
+     * Get model by where.
      *
-     * @param $field
-     * @param $content
+     * @param $where
      * @return mixed
      */
-    public function getByField($field, $content)
+    public function getByWhere(array $where)
     {
-        return $this->model->where($field, $content)->first();
+        return $this->model->where($where)->first();
     }
 
     /**

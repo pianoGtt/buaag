@@ -31,4 +31,15 @@ class UserRepository
         $this->model = $user;
     }
 
+    /**
+     * 获取用户信息
+     *
+     * @param array $userIds
+     * @return User
+     */
+    public function getUserListById(array $userIds)
+    {
+        return $this->model->whereIn('id', $userIds)->get()->keyBy('id')->toArray();
+    }
+
 }

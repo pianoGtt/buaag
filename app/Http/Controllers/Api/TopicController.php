@@ -60,7 +60,7 @@ class TopicController extends Controller
             return $this->fail($validator->errors()->first());
         }
         $where = [
-            ['user_id', $parameters['user_id']]
+            ['user_id', '>', 0]
         ];
         $topics = $this->topic->list($where, $perpage);
 
@@ -140,4 +140,34 @@ class TopicController extends Controller
         return $this->fail();
     }
 
+    /**
+     * Get topics bu user id.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getTopicByUserId(Request $request)
+    {
+        $perpage = $request->get('perpage') ?: 10;
+        $parameters = $request->all();
+        $validator = Validator::make($parameters, [
+            'user_id' => 'required|integer',
+        ]);
+        if ($validator->fails()) {
+            return $this->fail($validator->errors()->first());
+        }
+        $where = [
+            ['user_id', $parameters['user_id']]
+        ];
+        $topics = $this->topic->list($where, $perpage);
+
+        $data = [
+            'data' => $topics->items(),
+            'currentPage' => $topics->currentPage(),
+            'total' => $topics->total(),
+            'lastPage' => $topics->lastPage(),
+            'perPage' => $topics->perPage(),
+        ];
+        return $this->success($data);
+    }
 }

@@ -24,6 +24,7 @@ Route::prefix('common')->namespace('Common')->group(function () {
 Route::prefix('user')->namespace('Api')->group(function () {
     Route::any('index', 'UserController@index');
     Route::any('login', 'UserController@login');
+    Route::any('topics', 'TopicController@getTopicByUserId');
 });
 
 Route::prefix('topic')->namespace('Api')->group(function () {
@@ -35,5 +36,11 @@ Route::prefix('topic')->namespace('Api')->group(function () {
 Route::prefix('comment')->namespace('Api')->group(function () {
     Route::any('index', 'CommentController@index');
     Route::any('store', 'CommentController@store');
+});
+
+Route::prefix('follow')->namespace('Api')->group(function () {
+    Route::any('index', 'FollowsController@index');
+    Route::any('follow', 'FollowsController@follow');
+    Route::any('unfollow', 'FollowsController@unFollow');
 });
 
