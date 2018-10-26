@@ -5,10 +5,10 @@ var canvas = document.getElementById('canvas');
 var brush = canvas.getContext('2d');
 
 //初始数据
-var P = 5;					//最小像素单位
+var P = 10;					//最小像素单位
 var score = 0;				//得分
 var level = 0;				//级别
-var speed = 66;			//速度
+var speed = 100;			//速度
 var X = 250;				//蛇头X坐标
 var Y = 250;				//蛇头Y坐标
 var isStart = false;		//是否已经开始游戏
