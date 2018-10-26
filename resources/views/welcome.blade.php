@@ -105,7 +105,7 @@
             <div id="markpad">
                 <p>Score:<span id="score">0</span></p>
                 <p>Level:<span id="level">1</span></p>
-                <p><font size="1">按回车开始游戏</font></p>
+                <p><font size="1">按回车开始游戏 10-20分2级 20-30分3级 30+ 4级</font></p>
             </div>
         <script src="/js/snake.js" type="text/javascript"></script>
     </body>
