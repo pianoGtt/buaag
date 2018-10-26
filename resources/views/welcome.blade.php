@@ -1,5 +1,7 @@
 <!DOCTYPE HTML>
 <!--@author yang-->
+<!--v1.1-->
+<!--修复按快了以后自杀问题,优化了移动算法-->
 <html>
     <head>
         <title>贪吃蛇</title>
