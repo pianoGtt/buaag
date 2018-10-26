@@ -1,0 +1,15 @@
+body
+{
+	text-align: center;
+}
+
+#canvas
+{
+	margin: 0px auto;
+	background: #000000;
+}
+
+#markpad p
+{
+	margin: 0;
+}

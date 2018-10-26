@@ -1,4 +1,4 @@
-<!doctype html>
+{{--<!doctype html>
 <html lang="{{ app()->getLocale() }}">
     <head>
         <meta charset="utf-8">
@@ -90,5 +90,23 @@
                 </div>
             </div>
         </div>
+    </body>
+</html>--}}
+
+<!DOCTYPE HTML>
+<!--@author yang-->
+<html>
+    <head>
+        <title>贪吃蛇</title>
+        <link rel="stylesheet" type="text/css" href="/css/snake.css">
+    </head>
+    <body>
+        <canvas id="canvas" width="500" height="500"></canvas>
+            <div id="markpad">
+                <p>Score:<span id="score">0</span></p>
+                <p>Level:<span id="level">1</span></p>
+                <p><font size="1">按回车开始游戏</font></p>
+            </div>
+        <script src="/js/snake.js" type="text/javascript"></script>
     </body>
 </html>
