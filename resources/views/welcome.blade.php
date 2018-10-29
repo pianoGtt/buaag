@@ -7,7 +7,7 @@
 <html>
 	<head>
 		<title>canvas贪吃蛇</title>
-		<link rel="stylesheet" type="text/css" href="./snake.css">
+		<link rel="stylesheet" type="text/css" href="/css/snake.css">
 	</head>
 	<body>
 		<canvas id="canvas" width="500" height="500"></canvas>
@@ -17,6 +17,6 @@
 			<p><font size="1">按回车开始游戏 5分一级 逐级加速</font></p>
 			<p><font size="1">操作说明：小键盘 ↑↓←→</font></p>
 		</div>
-		<script src="./snake.js" type="text/javascript"></script>
+		<script src="/js/snake.js" type="text/javascript"></script>
 	</body>
 </html>
