@@ -66,11 +66,11 @@ function initSnake()
 		if(i === 0)
 		{
 			brush.fillStyle = headColor;
-
+			
 		}
 		else
 		{
-			brush.fillStyle = bodyColor;
+			brush.fillStyle = bodyColor;	
 		}
 
 		brush.strokeStyle = strokeColor;
