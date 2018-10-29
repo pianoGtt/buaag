@@ -66,11 +66,11 @@ function initSnake()
 		if(i === 0)
 		{
 			brush.fillStyle = headColor;
-			
+
 		}
 		else
 		{
-			brush.fillStyle = bodyColor;	
+			brush.fillStyle = bodyColor;
 		}
 
 		brush.strokeStyle = strokeColor;
@@ -117,8 +117,6 @@ function drawSnake(mX = 0, mY = 0)
 
 	//判断是否自杀
 	isKillSelf(X,Y);
-
-	console.log(speed);
 }
 
 //运行
