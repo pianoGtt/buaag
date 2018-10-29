@@ -315,7 +315,7 @@ function detectLevel()
 		clearInterval(loop);
 
 		level = newLevel;
-		speed -= 50;
+		speed -= 80;
 		document.getElementById('level').innerHTML = level;
 
 		loop = setInterval(run, speed);
