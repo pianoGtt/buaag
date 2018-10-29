@@ -19,4 +19,4 @@
 		</div>
 		<script src="/js/snake.js" type="text/javascript"></script>
 	</body>
-</html>
+</html> 
