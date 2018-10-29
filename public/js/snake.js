@@ -7,8 +7,8 @@ var brush = canvas.getContext('2d');
 //初始数据
 var P = 10;					//最小像素单位
 var score = 0;				//得分
-var level = 0;				//级别
-var speed = 100;			//速度
+var level = 1;				//级别
+var speed = 500;			//速度
 var X = 250;				//蛇头X坐标
 var Y = 250;				//蛇头Y坐标
 var isStart = false;		//是否已经开始游戏
@@ -16,10 +16,11 @@ var currentDirection = 38;	//当前方向
 var cW = 500;				//画布宽度 需要跟外面canvas统一
 var cH = 500;				//画布高度 需要跟外面canvas统一
 var loop;					//循环体
+var step = 5;				//升级豆数
 var headColor = '#F8CD76';	//蛇头颜色
 var bodyColor = '#75F94C';	//蛇身颜色
-var foodColor = '#FFFFFF';	//食物颜色
-var lock = false;			//卡键锁死
+var foodColor = '#FFF';		//食物颜色
+var strokeColor = '#000';	//蛇身边框颜色
 
 //方向 37左 38上 39右 40下
 var allowDirection = [37, 38, 39, 40];
@@ -29,6 +30,7 @@ var snakeBody = [[X, Y], [X, Y+P], [X, Y+P*2], [X, Y+P*3], [X, Y+P*4]];
 
 //初始食物
 var food = [];
+var maxFood = 3;
 
 //初始化
 initSnake();
@@ -43,7 +45,7 @@ window.onkeyup = function(key)
 			isStart = true;
 			alert('开始游戏');
 			createFood();
-			loop = setInterval(move, speed);
+			loop = setInterval(run, speed);
 		}
 	}
 	else
@@ -55,10 +57,73 @@ window.onkeyup = function(key)
 	}
 }
 
-//移动
-function move()
+//初始蛇的位置
+function initSnake()
 {
-	//左移动
+	//绘制初始的蛇身
+	for(i=0;i<=snakeBody.length - 1;i++)
+	{
+		if(i === 0)
+		{
+			brush.fillStyle = headColor;
+
+		}
+		else
+		{
+			brush.fillStyle = bodyColor;
+		}
+
+		brush.strokeStyle = strokeColor;
+		brush.fillRect(snakeBody[i][0], snakeBody[i][1], P, P);
+		brush.strokeRect(snakeBody[i][0], snakeBody[i][1], P, P);
+	}
+}
+
+//画蛇
+function drawSnake(mX = 0, mY = 0)
+{
+	//删除原先蛇所在的图层
+	for(i=0;i<=snakeBody.length-1;i++)
+	{
+		brush.clearRect(snakeBody[i][0], snakeBody[i][1], P, P);
+	}
+
+	//绘制新的移动后的蛇图层
+	for(i=snakeBody.length-1;i>=0;i--)
+	{
+		if(i === 0)
+		{
+			snakeBody[i][0] = X += mX;
+			snakeBody[i][1] = Y += mY;
+			brush.fillStyle = headColor;
+		}
+		else
+		{
+			snakeBody[i][0] = snakeBody[i-1][0];
+			snakeBody[i][1] = snakeBody[i-1][1];
+			brush.fillStyle = bodyColor;
+		}
+
+		brush.strokeStyle = strokeColor;
+		brush.fillRect(snakeBody[i][0], snakeBody[i][1], P, P);
+		brush.strokeRect(snakeBody[i][0], snakeBody[i][1], P, P);
+	}
+
+	//判断是否吃豆
+	eat(X,Y);
+
+	//判断是否撞墙
+	isOutSide(X,Y);
+
+	//判断是否自杀
+	isKillSelf(X,Y);
+
+	console.log(speed);
+}
+
+//运行
+function run()
+{
 	if(currentDirection === 37)
 	{
 		drawSnake(-P);
@@ -78,93 +143,6 @@ function move()
 	{
 		drawSnake(0 , P);
 	}
-
-	//判断是否吃豆
-	if(food.length > 0)
-	{
-		let fX = food[0][0];
-		let fY = food[0][1];
-		if(snakeBody[0][0] === fX && snakeBody[0][1] === fY )
-		{
-			add();
-			createFood();
-		}
-	}
-
-	//判断是否撞墙
-	isOutSide();
-
-	//判断是否自杀
-	isKillSelf();
-}
-
-//初始蛇的位置
-function initSnake()
-{
-	//绘制新的蛇身
-	for(i=0;i<=snakeBody.length - 1;i++)
-	{
-		if(i === 0)
-		{
-			brush.fillStyle = headColor;
-			brush.fillRect(snakeBody[i][0], snakeBody[i][1], P, P);
-		}
-		else
-		{
-			brush.fillStyle = bodyColor;
-			brush.fillRect(snakeBody[i][0], snakeBody[i][1], P, P);
-		}
-	}
-}
-
-//画蛇
-function drawSnake(mX = 0, mY = 0)
-{
-	//复制一份蛇身体,原身体用于清除原先点位
-	let tempShakeBody = JSON.parse(JSON.stringify(snakeBody));
-
-	//删掉蛇尾
-	brush.clearRect(snakeBody[snakeBody.length-1][0], snakeBody[snakeBody.length-1][1], P, P);
-
-	//绘制新的蛇身
-	for(i=0;i<=snakeBody.length - 1;i++)
-	{
-		if(i === 0)
-		{
-			brush.fillStyle = headColor;
-			snakeBody[i][0] += mX;
-			snakeBody[i][1] += mY;
-			brush.fillRect(snakeBody[i][0], snakeBody[i][1], P, P);
-		}
-		else
-		{
-			brush.fillStyle = bodyColor;
-			snakeBody[i][0] = tempShakeBody[i-1][0];
-			snakeBody[i][1] = tempShakeBody[i-1][1];
-			brush.fillRect(snakeBody[i][0], snakeBody[i][1], P, P);
-		}
-	}
-
-	lock = false;
-}
-
-//添加蛇身
-function add()
-{
-	let sw = snakeBody[snakeBody.length - 1];
-	let sw2 = snakeBody[snakeBody.length - 2];
-
-	let pX = sw[0] - sw2[0] + sw[0];
-	let pY = sw[1] - sw2[1] + sw[1];
-
-	snakeBody.push([pX, pY]);
-	food.pop();
-
-	score += 1;
-	document.getElementById('score').innerHTML = score;
-
-	detectLevel();
-	createFood();
 }
 
 //移动
@@ -173,144 +151,175 @@ function changeDirection(direction)
 	switch(currentDirection)
 	{
 		case 37:
-			if(direction === 38 || direction === 40)
+			switch(direction)
 			{
-				if(lock === false)
-				{
-					currentDirection = direction;
-					lock = true;
-				}
+				case 37:
+					_move(direction, -P);
+				break;
+				case 38:
+					_move(direction, 0, -P);
+				break;
+				case 40:
+					_move(direction, 0, P);
+				break;
 			}
-			break;
+		break;
 		case 38:
-			if(direction === 37 || direction === 39)
+			switch(direction)
 			{
-				if(lock === false)
-				{
-					currentDirection = direction;
-					lock = true;
-				}
+				case 38:
+					_move(direction, 0, -P);
+				break;
+				case 37:
+					_move(direction, -P);
+				break;
+				case 39:
+					_move(direction, P);
+				break;
 			}
-			break;
+		break;
 		case 39:
-			if(direction === 38 || direction === 40)
+			switch(direction)
 			{
-				if(lock === false)
-				{
-					currentDirection = direction;
-					lock = true;
-				}
+				case 39:
+					_move(direction, P);
+				break;
+				case 38:
+					_move(direction, 0, -P);
+				break;
+				case 40:
+					_move(direction, 0, P);
+				break;
 			}
-			break;
+		break;
 		case 40:
-			if(direction === 37 || direction === 39)
+			switch(direction)
 			{
-				if(lock === false)
-				{
-					currentDirection = direction;
-					lock = true;
-				}
+				case 40:
+					_move(direction, 0, P);
+				break;
+				case 37:
+					_move(direction, -P);
+				break;
+				case 39:
+					_move(direction, P);
+				break;
 			}
-			break;
+		break;
+	}
+}
+
+//移动
+function _move(direction, mX = 0, mY = 0)
+{
+	drawSnake(mX, mY);
+	currentDirection = direction;
+}
+
+//吃豆
+function eat(eX, eY)
+{
+	for(i=0;i<food.length;i++)
+	{
+		if(eX === food[i][0] && eY === food[i][1])
+		{
+			//获取蛇尾坐标和次蛇尾坐标
+			let sw = snakeBody[snakeBody.length - 1];
+			let sw2 = snakeBody[snakeBody.length - 2];
+
+			//计算XY坐标差值获取要添加的蛇身方向
+			let aX = sw[0] - sw2[0] + sw[0];
+			let aY = sw[1] - sw2[1] + sw[1];
+
+			food.splice(i,1);
+			snakeBody.push([aX, aY]);
+
+			score += 1;
+			document.getElementById('score').innerHTML = score;
+
+			detectLevel();
+			createFood();
+		}
 	}
 }
 
 //是否自杀
-function isKillSelf()
+function isKillSelf(kX, kY)
 {
 	for(i=1;i<=snakeBody.length - 1;i++)
 	{
-		if(snakeBody[0][0] === snakeBody[i][0] && snakeBody[0][1] === snakeBody[i][1])
+		if(kX === snakeBody[i][0] && kY === snakeBody[i][1])
 		{
-			clearInterval(loop);
-			alert('你啃到自己了,最终得分:' + score);
-			reset();
+			reset('你啃到自己了,最终得分:' + score);
 		}
 	}
 }
 
 //是否撞墙
-function isOutSide()
+function isOutSide(oX, oY)
 {
-	if(snakeBody[0][0] < 0 || snakeBody[0][1] < 0 || snakeBody[0][0] > (cW - P) || snakeBody[0][1] > (cH - P))
+	if(oX < 0 || oY < 0 || oX > (cW - P) || oY > (cH - P))
 	{
-		clearInterval(loop);
-		alert('你撞墙上了,最终得分:' + score);
-		reset();
+		reset('你撞墙上了,最终得分:' + score);
 	}
 }
 
 //随机生成食物
 function createFood()
 {
-	if(food.length === 0)
+	//当前食物数量
+	let cFood = food.length;
+
+	if(cFood < maxFood)
 	{
-		let fX = Math.floor(Math.random()*(cW-P+1) / P) * P;
-		let fY = Math.floor(Math.random()*(cH-P+1) / P) * P;
-
-		let c = brush.getImageData(fX, fY, P, P).data;
-		let red = c[0];
-		let green = c[1];
-		let blue = c[2];
-
-		//没有被占用颜色格子的才能生成食物
-		if(red === 0 && green === 0 && blue === 0)
+		for(i=cFood;i<maxFood;)
 		{
-			brush.fillStyle = foodColor;
-			brush.fillRect(fX, fY, P, P);
+			//随机获取XY坐标
+			let fX = Math.floor(Math.random() * (cW - P*2 + 1) / P) * P;
+			let fY = Math.floor(Math.random() * (cW - P*2 + 1) / P) * P;
 
-			food.push([fX, fY]);
-		}
-		else
-		{
-			createFood();
+			//获取该坐标下RGB颜色
+			let c = brush.getImageData(fX, fY, P, P).data;
+			let red = c[0];
+			let green = c[1];
+			let blue = c[2];
+
+			//没有被占用颜色格子的才能生成食物
+			if(red === 0 && green === 0 && blue === 0)
+			{
+				brush.fillStyle = foodColor;
+				brush.fillRect(fX, fY, P, P);
+
+				brush.strokeStyle = strokeColor;
+				brush.strokeRect(fX, fY, P, P);
+
+				food.push([fX, fY]);
+				i++;
+			}
 		}
 	}
 }
 
 //重置游戏
-function reset()
+function reset(msg)
 {
+	clearInterval(loop);
+	alert(msg);
 	return window.location.reload();
 }
 
 //检测级别
 function detectLevel()
 {
-	if(score >= 6 && score <= 10 && level !== 2)
+	let newLevel = Math.ceil(score/step);
+	if(newLevel > level)
 	{
-		level = 2;
+		clearInterval(loop);
+
+		level = newLevel;
+		speed -= 50;
 		document.getElementById('level').innerHTML = level;
 
-		speed -= 20;
-		clearInterval(loop);
-		loop = setInterval(move, speed);
-	}
-	else if(score >= 11 && score <= 15 && level !== 3)
-	{
-		level = 3;
-		document.getElementById('level').innerHTML = level;
-
-		speed -= 20;
-		clearInterval(loop);
-		loop = setInterval(move, speed);
-	}
-	else if(score >= 16 && score <= 20 && level !== 4)
-	{
-		level = 4;
-		document.getElementById('level').innerHTML = level;
-
-		speed -= 20;
-		clearInterval(loop);
-		loop = setInterval(move, speed);
-	}
-	else if(score >= 21 && level !== 5)
-	{
-		level = 5;
-		document.getElementById('level').innerHTML = level;
-
-		speed -= 20;
-		clearInterval(loop);
-		loop = setInterval(move, speed);
+		loop = setInterval(run, speed);
 	}
 }
